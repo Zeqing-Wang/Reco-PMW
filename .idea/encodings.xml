@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/orgindata/2021软科中国大学排名.xlsx" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/orgindata/河南2015-2021年理科最低投档分数线.csv" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/orgindata/河南2015-2021理科一份一段表.csv" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/GAoptim.py" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/data/henan_yifenyiduan.csv" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/data/recList.csv" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/dataprocess/cat2020BP.py" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/dataprocess/connect.py" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/dataprocess/fillData.py" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/dataprocess/fill_new.py" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/dataprocess/orderChange.py" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/dataprocess/rankWash.py" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/dataprocess/wash.py" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/dataprocess/wash2021Only.py" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/dataprocess/washHenan.py" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/getmark.py" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/getrank.py" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/reco_part/rec.py" charset="GBK" />
+  </component>
+</project>
