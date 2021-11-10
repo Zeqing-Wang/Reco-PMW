@@ -4,7 +4,7 @@ A Novel College Entrance Filling Recommendation Algorithm Based on Score Line Pr
 
 ## 项目说明
 
-这是高考志愿推荐算法（Reco-PMW）的代码以及原始数据。包含了论文中用到的所有数据以及流程代码。
+这是高考志愿推荐算法（Reco-PMW）的代码以及原始数据。包含了论文中用到的所有数据以及流程代码。result_new.xlsx为与其他系统对比的详细结果
 
 ### 代码说明
 
@@ -38,15 +38,15 @@ A Novel College Entrance Filling Recommendation Algorithm Based on Score Line Pr
 
 ##### 遗传算法调优时
 
-在进行遗传算法调优时，需要将rec.py中的相关参数设置为对2020年数据进行预测，因此最终推荐对比是将2021年数据作为测试集进行对比，参数相关设置已经在代码注释中注明。
+在进行遗传算法调优时，直接运行GAoptima.py即可  这里调用的recGA中的代码
 
 ##### 结果画图时
 
-调用代码中plot()函数即可
+调用rec.py代码中plot()函数即可
 
 ##### 推荐时
 
-调用recAll函数，其中a,b,c,d为已经经过调优后的参数，在参数mark输入2021年河南理科考生分数即可。代码默认在三个类别中各给出两所院校，可以根据程序输出的三个类别入选数量，在函数final中对chonglen、wenlen、baolen进行调整。
+调用rec.py中recAll函数，其中a,b,c,d为已经经过调优后的参数，在参数mark输入2021年河南理科考生分数即可。代码默认在三个类别中各给出两所院校，可以根据程序输出的三个类别入选数量，在函数final中对chonglen、wenlen、baolen进行调整。
 
 ### 联系我们
 
