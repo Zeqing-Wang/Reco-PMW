@@ -4,7 +4,7 @@
 # @File    : GAoptim.py
 # @Software: PyCharm
 ## 2. GA优化算法
-from rec import estimate
+from recGA import estimate
 import tqdm
 import random
 import math
@@ -257,6 +257,7 @@ class GA(object):
         plt.xlabel('迭代轮数', size=15)
         plt.ylabel('适应度', size=15)
         #plt.title('遗传算法参数优化')
+        plt.savefig(fname='GA.svg', format='svg')
         plt.show()
 
     ### 2.8 主函数
@@ -299,6 +300,6 @@ class GA(object):
         d = parameters[-1][3] / sum(parameters[-1])
         print('a=',a,'b=',b,'c=',c,'d=',d)
 if __name__ == '__main__':
-    seed_torch(620664)
-    ga = GA(population_size=30, chromosome_num=4, chromosome_length=4, max_value=10, iter_num=40, pc=0.5, pm=0.001)
+    seed_torch(1005)
+    ga = GA(population_size=30, chromosome_num=4, chromosome_length=4, max_value=10, iter_num=50, pc=0.5, pm=0.001)
     ga.main()

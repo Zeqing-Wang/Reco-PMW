@@ -1,4 +1,6 @@
 # -*- coding: UTF-8 -*-
+from time import sleep
+
 from getmark import getmark
 from getrank import getrank
 import pandas as pd
@@ -119,10 +121,10 @@ def normalization(p,f,r,g):
 def randomTest():
     Test_num = 50
     # 每个分段模拟50位考生
-    a = 0.7
-    b = 0.15
-    c = 0.05
-    d = 0.1
+    a = 0.73
+    b = 0.13
+    c = 0.09
+    d = 0.05
     mark_650 = []
     mark_600 = []
     mark_550 = []
@@ -183,13 +185,13 @@ def plot():
     wen = [res650[1],res600[1],res550[1],res500[1],res450[1]]
     bao = [res650[2],res600[2],res550[2],res500[2],res450[2]]
     fig, axes = plt.subplots(1, 1, figsize=(8, 4))
-    axes.plot(label, chong, linestyle='-',label="冲", color="#845EC2", marker='x', linewidth=1.5)
-    axes.plot(label, wen, linestyle='-',label="稳", color="#D7E8F0", marker='x', linewidth=1.5)
-    axes.plot(label, bao, linestyle='-', label="保", color="#2E839E", marker='x', linewidth=1.5)
+    axes.plot(label, chong, linestyle='-',label="冲", color="#845EC2", marker='x', linewidth=3)
+    axes.plot(label, wen, linestyle='-',label="稳", color="#D7E8F0", marker='o', linewidth=3)
+    axes.plot(label, bao, linestyle='-', label="保", color="#2E839E", marker='v', linewidth=3)
     axes.set_ylabel("录取率")
     axes.set_xlabel("分数区间")
     axes.legend()
-    plt.show()
+    plt.savefig(fname='marktest.svg', format='svg')
     plt.show()
 def calResult(mark,real_mark,result):
     chong = 0
@@ -321,12 +323,13 @@ def final(school,result,batch,r):
     bao = list(zip(bao,bao_batch))
     return chong,wen,bao
 if __name__ =='__main__':
-    seed_torch(620664) # 固定随机数种子
+    seed_torch(1005) # 固定随机数种子
     # plot()
-    a = 0.7
-    b = 0.15
-    c = 0.05
-    d = 0.1
-    _,_,_,school,result,batch,r = recAll(575,a,b,c,d)
+    # sleep(1000)
+    a = 0.73
+    b = 0.13
+    c = 0.09
+    d = 0.05
+    _,_,_,school,result,batch,r = recAll(618,a,b,c,d)
     chong,wen,bao = final(school,result,batch,r)
     print(chong,wen,bao)
