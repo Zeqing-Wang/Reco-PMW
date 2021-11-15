@@ -1,3 +1,4 @@
+
 # -*- coding: UTF-8 -*-
 from time import sleep
 
@@ -17,12 +18,6 @@ def nor(x):
     # 这里为使用部分 测试时请换为下面的函数nortest
     u = 540  # 均值μ
     sig = 55  # 标准差δ
-    y_sig = np.exp(-(x - u) ** 2 / (2 * sig ** 2)) / (math.sqrt(2 * math.pi) * sig)
-    return y_sig
-def nortest(x):
-    # 这里为测试部分（GA调参）
-    u = 517  # 均值μ
-    sig = 56  # 标准差δ
     y_sig = np.exp(-(x - u) ** 2 / (2 * sig ** 2)) / (math.sqrt(2 * math.pi) * sig)
     return y_sig
 def seed_torch(seed):
@@ -51,10 +46,10 @@ def classify(year,mark):
         year = 2015
         for j in range(6):#GA时改为5  使用时改为6
             #print(year)
-            if df[str(year)][i]>rank_s:
+            if df[str(year)][i] >= rank_s:
                 count = count+1
                 school.append(df['name'][i])
-                school_rank.append(int(df['2021rank'][i]))  #这里直接添加行号即可  因为他是按照排名顺序来的 不是的！！
+                school_rank.append(int(df['2021rank'][i]))
                 school_batch.append(df['batch'][i])
                 break
             year = year+1
@@ -63,14 +58,12 @@ def classify(year,mark):
     return school,school_rank,school_batch
 def claPara(school,year_s,mark,school_rank,school_batch):
     # 根据筛选出的学校 考生年份 考生分数 计算概率的相关参数
-    real_mark = [] # 提供学校预测年份的实际分数线 注意 是真实分数 并非预测 ！！！！
-    # 以下年份仅供测试  之后需要改为以15-20作为已知 21作为预测！！
-    p = [] # 往年（这里是15-19年）能够考上位次所占百分比
+    real_mark = [] # 提供学校预测年份的实际分数线 注意 是真实分数 并非预测 ！！！！！
+    p = [] # 往年（这里是15-20年）能够考上位次所占百分比
     f = [] # 预测得到的分与考生分数的百分比
     r = [] # 软科综合实力排名
     g = [] # 高校投档位次与目标排名的距离离散度
-    # 计算出着四个参数后进行归一化处理  之后进行参数优化
-    year = ['2015', '2016', '2017', '2018', '2019','2020']  # 后期需要加上2020 GA时把2020去掉  使用时把2020加上
+    year = ['2015', '2016', '2017', '2018', '2019','2020']
     # 要改成预测的！！！   注意预测的是在一个单独文件里面
     yearP = '2021'  # 后期改为2021 GA时改为2020  使用时改为2021
     rank_s = getrank(mark,year_s)
@@ -84,12 +77,12 @@ def claPara(school,year_s,mark,school_rank,school_batch):
                 # 计算p
                 count = 0
                 for k in year:
-                    if df[k][j]>rank_s:
+                    if df[k][j] >= rank_s:
                         count = count+1
                 count = count/len(year)
                 p.append(count)
                 # 计算f
-                f_c = (mark-getmark(df['bp'][j],2021))/(750-mark) #GA时改为 bp2020 与 2020 使用时改成bp 2021
+                f_c = (mark-getmark(df['bp'][j],2021))/(750-mark) #使用时改成 bp 2021
                 f.append(f_c)
                 # 计算g
                 g_c = 0
@@ -103,17 +96,13 @@ def claPara(school,year_s,mark,school_rank,school_batch):
     return p, f, r, g, real_mark
 
 def normalization(p,f,r,g):
-    maxP = max(p)
     maxF = max(f)
     maxR = max(r)
     maxG = max(g)
-    minP = min(p)
     minF = min(f)
     minR = min(r)
     minG = min(g)
     for i in range(len(p)):
-        if maxP == minP: # 有一种极端情况  即 所有院校都相同
-            p[i] = p[i]
         f[i] = (f[i] - minF) / (maxF - minF)
         r[i] = (r[i] - minR) / (maxR - minR)
         g[i] = (g[i] - minG) / (maxG - minG)
@@ -201,15 +190,15 @@ def calResult(mark,real_mark,result):
     wen_sum = 0
     bao_sum = 0
     for i in range(len(result)):
-        if result[i]>=0.8: #保
+        if result[i]>0.8: #保
             if real_mark[i]<=mark:
                 bao = bao + 1
             bao_sum = bao_sum + 1
-        elif result[i]<=0.6: #冲
+        elif result[i]<0.6: #冲
             if real_mark[i]<=mark:
                 chong = chong + 1
             chong_sum = chong_sum + 1
-        else:
+        elif result[i]>=0.6 and result[i]<=0.8:#稳
             if real_mark[i]<=mark:
                 wen = wen+1
             wen_sum = wen_sum+1
@@ -227,31 +216,6 @@ def calResult(mark,real_mark,result):
     else:
         baoP = 0
     return chongP,wenP,baoP
-def estimate(a,b,c,d):
-    mark = [475,500,525,550,575,600,625,650]
-    fit = 0
-    for i in mark:
-        bao,var = recGA(i,a,b,c,d)
-        fit_temp = 0.8*bao+15*var
-        fit = fit + fit_temp
-    return fit/8
-    #print(fit)
-
-def recGA(mark, a, b, c, d):
-    yearTest = 2021 #GA时为2020  使用时为2021
-    markTest = mark
-    school, school_rank, school_batch = classify(yearTest, markTest)
-    # real_mark需要改
-    p, f, r, g, real_mark = claPara(school, yearTest, markTest, school_rank, school_batch)
-    # print(p,f,r,g)
-    p, f, r, g = normalization(p, f, r, g)
-    result = []
-    for i in range(len(p)):
-        temp = p[i] * a + f[i] * b + r[i] * c + g[i] * d
-        result.append(temp)
-    chong, wen, bao = calResult(markTest, real_mark, result)
-    # 这里返回的是冲稳保三个录取率 以及命中率之间的方差 result保存了50所学校的录取概率 school中保存了50所学校  这里面
-    return bao, np.var(result)
 def recAll(mark,a,b,c,d):
     yearTest = 2021 #GA时改为2020 使用时为2021
     markTest = mark
@@ -281,14 +245,14 @@ def final(school,result,batch,r):
     # 计算推荐度
     for k in range(len(result)):
         recmark.append(result[k]*(1-r[k]))
-    # 第二版 定义推荐度 p*(1-r)  每个类别中取推荐度前两位  修复部分情况下无法推荐满6所高校的情况(存疑)  并且输出高校所在批次
+    # 定义推荐度 p*(1-r)  每个类别中取推荐度前两位  修复部分情况下无法推荐满6所高校的情况  并且输出高校所在批次
     dict_r = list(sorted(zip(recmark,school,result,batch),reverse=True))
     #print(dict_r)
     #sleep(1000)
     all_school = [] #维护一个总推荐
     chonglen=2
-    wenlen=2
-    baolen=2
+    wenlen=0
+    baolen=4
     # 计算一下每个类中的个数 方便调整
     chong_num = []
     wen_num = []
@@ -308,12 +272,10 @@ def final(school,result,batch,r):
             bao.append(dict_r[i][1])
             bao_batch.append(dict_r[i][3])
             all_school.append(dict_r[i])
-            #continue
         if dict_r[i][2]<barDown and len(chong)<chonglen:
             chong.append(dict_r[i][1])
             chong_batch.append(dict_r[i][3])
             all_school.append(dict_r[i])
-            #continue
         if dict_r[i][2]>=barDown and dict_r[i][2]<= barUp and len(wen)<wenlen:
             wen.append(dict_r[i][1])
             wen_batch.append(dict_r[i][3])
